@@ -1,0 +1,11 @@
+{
+  "name": "fullstackosa03",
+  "version": "1.0.0",
+  "description": "osa03 harjoitukset",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Juha Haipus",
+  "license": "ISC"
+}
