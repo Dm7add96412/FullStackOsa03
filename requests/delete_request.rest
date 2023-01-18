@@ -1,7 +1,7 @@
-POST https://thepuhelinluettelo.fly.dev/api/persons/
+POST http://localhost:8080/api/persons/
 Content-Type: application/json
 
 {
-    "name": "007",
-    "number": "998777"
+    "name": "Juujaaaaaa",
+    "number": "09867565"
 }

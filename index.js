@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -14,40 +15,15 @@ morgan.token('post-body', function (req, res) {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-body'))
 
-const generateID = () => {
-    return Math.floor(persons.length * 5 * Math.random())
-}
-
-let persons = [
-    {
-        id: 1,
-        name: "Juha",
-        number: "123123"
-    },
-    {
-        id: 2,
-        name: "Tonttu",
-        number: "321321"
-    },
-    {
-        id: 3,
-        name: "Joulupukki",
-        number: "998877"
-    },
-    {
-        id: 4,
-        name: "Muori",
-        number: "445566"
-    }
-  ]
-
 app.get('/', (req, res) => {
     res.send('<h2>Hello World!</h2>')
 })
 
-app.get('/api/persons', (req, res) => {
-    res.json(persons)
-})
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then(persons => {
+      response.json(persons)
+    })
+  })
 
 app.get('/info', (req, res) => {
     res.send(`Phonebook has info for ${persons.length} people<br>
@@ -72,8 +48,8 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+/*
 app.post('/api/persons', (request, response) => {
-    let geid = Number(persons[0].id)
     if (!request.body.name || !request.body.number) {
         return response.status(400).json({
             error: 'content missing'
@@ -97,9 +73,26 @@ app.post('/api/persons', (request, response) => {
     }
   
     persons = persons.concat(person)
- //   console.log(person)
     response.json(person)
-  })
+  }) */
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (body.name === undefined) {
+        console.log(body.content)
+        return response.status(400).json({ error: 'content missing' })     
+    }
+
+    const person = new Person({
+        name: body.name,
+        number: body.number 
+    })
+
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
+})
 
 const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
