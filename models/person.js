@@ -12,9 +12,22 @@ mongoose.connect(url)
     console.log('error connecting to MongoDB:', error.message)
   })
 
+function validator (val) {
+  return val[2] === '-' || val[3] === '-'
+}
+
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minlength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    minlength: 9,
+    required: true,
+    validate: [validator, 'Number not in correct form, missing (-) symbol']
+  }
 })
 
 personSchema.set('toJSON', {
